@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
 import requests, sys, webbrowser
 
 from bs4 import BeautifulSoup
@@ -16,8 +13,6 @@ from pymongo import MongoClient
 
 from bson.objectid import ObjectId
 
-
-# In[2]:
 
 
 #connexion à MongoDB
@@ -42,9 +37,6 @@ postes = { "_id" : None, "page_url" : None, "message_poste" : None, "nbre_commen
 
 commentaires = { "_id" : None, "page_url" : None , "owner_compte_commentaire" : None , "commentaire" : None }
 
-
-
-# In[3]:
 
 
 def liens_postes_sujet(sujet):
@@ -115,7 +107,6 @@ def liens_postes_sujet(sujet):
     return pages_instagram_recupere
 
 
-# In[4]:
 
 
 def collection_posts(liens_post):
@@ -277,7 +268,6 @@ def collection_posts(liens_post):
     print('Fin')
 
 
-# In[5]:
 
 
 def main():
@@ -292,7 +282,7 @@ def main():
     #----------------------------------#
 
     
-    topic = "Election Emmanuel Macron"  
+    topic = "décès de jacques chirac"  
     
     liens = liens_postes_sujet(topic)
     
@@ -302,21 +292,9 @@ def main():
         
 
 
-# In[6]:
-
 
 if __name__ == '__main__':
     main()
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
 
 
 
