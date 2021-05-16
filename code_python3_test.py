@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 import requests, sys, webbrowser
 
 from bs4 import BeautifulSoup
@@ -13,6 +10,8 @@ from pymongo import MongoClient
 
 from bson.objectid import ObjectId
 
+
+# In[2]:
 
 
 #connexion à MongoDB
@@ -33,10 +32,13 @@ commentaires_BD = db["commentaires"]
 
 
 
-postes = { "_id" : None, "page_url" : None, "message_poste" : None, "nbre_commentaire" : None , "url_video" : None , "url_image" : None , "infos_poste" : None , "owner_name" : None , "owner_compte" : None}
+postes = { "_id" : None, "page_url" : None, "message_poste" : None, "nbre_commentaire" : None , "url_video" : None , "url_image" : None  , "owner_name" : None , "owner_compte" : None}
 
 commentaires = { "_id" : None, "page_url" : None , "owner_compte_commentaire" : None , "commentaire" : None }
 
+
+
+# In[3]:
 
 
 def liens_postes_sujet(sujet):
@@ -69,7 +71,9 @@ def liens_postes_sujet(sujet):
             soup = BeautifulSoup(resultats.text, 'lxml')
 
             liens_pages_instagram = soup.find_all('a')
-
+            
+            time.sleep(2)
+            
             for i in range(len(liens_pages_instagram)):
 
                 if reseau_social in liens_pages_instagram[i]['href']:
@@ -107,15 +111,20 @@ def liens_postes_sujet(sujet):
     return pages_instagram_recupere
 
 
+# In[4]:
 
 
 def collection_posts(liens_post):
     
     try:
         
-        if not (os.path.exists('Dossier_videos_post') and os.path.exists('Dossier_images_post')):
+        
+        if not os.path.exists('Dossier_videos_post'):
 
             os.makedirs('Dossier_videos_post')
+
+            
+        if not  os.path.exists('Dossier_images_post'):
 
             os.makedirs('Dossier_images_post')
 
@@ -167,11 +176,8 @@ def collection_posts(liens_post):
                     #Insertion dans le dictionnaire
                     postes["url_image"] =  path + '/Dossier_images_post/{}.jpg'.format(shortcode)
 
-                if len(data['accessibility_caption']) < 40:
                     
-                    infos_post = data['accessibility_caption'].text
 
-                    infos_post = str(infos_post)[0:str(infos_post).index('.')+1]
                 
                 message_post = data['edge_media_to_caption']['edges'][0]['node']['text']
 
@@ -190,7 +196,6 @@ def collection_posts(liens_post):
                 postes["page_url"] =  post
                 postes["message_poste"] = message_post
                 postes["nbre_commentaire"] = nombre_commentaires
-                postes["infos_poste"] = infos_post
                 postes["owner_name"] =  infos_owner_fulName
                 postes["owner_compte"] = infos_owner_compte
 
@@ -206,7 +211,6 @@ def collection_posts(liens_post):
 
                 print('Nom du propriétaire du compte: '+ str(infos_owner_fulName))
 
-                print('Information sur le poste: '+ str(infos_post))
 
                 print('Nombre de commentaire: ' + str(nombre_commentaires))
 
@@ -261,13 +265,12 @@ def collection_posts(liens_post):
     
     except:
         
-        print("Erreur de traitement: Trop de requettes sans authentification")
+        print("Erreur de D'accès aux informations sur Instagram")
         
-        exit()
     
-    print('Fin')
 
 
+# In[5]:
 
 
 def main():
@@ -282,7 +285,7 @@ def main():
     #----------------------------------#
 
     
-    topic = "décès de jacques chirac"  
+    topic = "Election Emmanuel Macron"  
     
     liens = liens_postes_sujet(topic)
     
@@ -292,9 +295,9 @@ def main():
         
 
 
+# In[6]:
+
 
 if __name__ == '__main__':
     main()
-
-
 
